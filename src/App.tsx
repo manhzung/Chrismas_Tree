@@ -73,16 +73,16 @@ function App() {
         // Color logic
         const colorChoice = Math.random();
         let color: [number, number, number] = [0, 1, 0];
-        if (colorChoice < 0.55) { // Green
+        if (colorChoice < 0.40) { // Green (Giảm còn 40%)
              const intensity = 0.85 + Math.random() * 0.15;
              color = [0.15 * intensity, (0.6 + Math.random() * 0.4) * intensity, 0.15 * intensity];
-        } else if (colorChoice < 0.72) { // Gold
+        } else if (colorChoice < 0.70) { // Gold (Tăng lên 30%)
              const intensity = 0.9 + Math.random() * 0.1;
-             color = [1 * intensity, (0.85 + Math.random() * 0.15) * intensity, 0.3 * intensity];
-        } else if (colorChoice < 0.86) { // Red
+             color = [1 * intensity, (0.84 + Math.random() * 0.15) * intensity, 0.1 * intensity]; // Vàng rực hơn
+        } else if (colorChoice < 0.95) { // Red (Tăng lên 25%)
              const intensity = 0.9 + Math.random() * 0.1;
              color = [1 * intensity, 0.15 * intensity, 0.1 * intensity];
-        } else { // Blue
+        } else { // Blue (Giảm còn 5%)
              const intensity = 0.85 + Math.random() * 0.15;
              color = [0.4 * intensity, (0.6 + Math.random() * 0.3) * intensity, 1 * intensity];
         }
@@ -254,7 +254,7 @@ function App() {
     const starPointsArray = createStarPoints(0, treeHeight / 2 + 0.7, 0, 0.9, 0.36); // Higher position
     starPointsArray.forEach(p => {
       starParticles.push(p);
-      starColors.push(1, 0.95, 0.35); // Golden star - VERY BRIGHT
+      starColors.push(1.0, 0.84, 0.0); // Golden star - Pure Yellow (Gold)
       // Star has EXTREME size variation - LARGER overall for visibility
       const starSize = Math.random();
       if (starSize < 0.15) {
@@ -337,7 +337,6 @@ function App() {
     let isMouseDown = false;
     let startDragX = 0;
     let startDragY = 0;
-    let hasMoved = false;
 
     // Hàm chung xử lý di chuyển (cho cả Mouse và Touch)
     const handleMoveInput = (clientX: number, clientY: number) => {
@@ -352,7 +351,6 @@ function App() {
             );
             if (moveDistance > 15) {
                 isDragging = true;
-                hasMoved = true;
             }
         }
     };
@@ -369,7 +367,6 @@ function App() {
     const onDown = (clientX: number, clientY: number) => {
         isMouseDown = true;
         isDragging = false;
-        hasMoved = false;
         startDragX = clientX;
         startDragY = clientY;
     };
@@ -382,7 +379,7 @@ function App() {
     };
 
     // Hàm chung xử lý nhả ra - Đơn giản hóa: chỉ cần không drag là click
-    const onUp = (e?: MouseEvent | TouchEvent) => {
+    const onUp = () => {
         if (isMouseDown && !isDragging) {
             // Nếu không phải drag -> là click -> toggle phân tán
             isDispersed = !isDispersed;
@@ -390,7 +387,6 @@ function App() {
         }
         isMouseDown = false;
         isDragging = false;
-        hasMoved = false;
     };
 
     // Hàm xử lý click trực tiếp - đơn giản và đáng tin cậy hơn
