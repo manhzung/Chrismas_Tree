@@ -331,8 +331,6 @@ function App() {
 
     // ============ XỬ LÝ SỰ KIỆN CHUỘT/CẢM ỨNG (FIXED) ============
     
-    let mouseX = 0;
-    let mouseY = 0;
     let isDragging = false;
     let isMouseDown = false;
     let startDragX = 0;
@@ -340,9 +338,6 @@ function App() {
 
     // Hàm chung xử lý di chuyển (cho cả Mouse và Touch)
     const handleMoveInput = (clientX: number, clientY: number) => {
-        mouseX = (clientX / window.innerWidth) * 2 - 1;
-        mouseY = -(clientY / window.innerHeight) * 2 + 1;
-
         if (isMouseDown) {
             // Nếu đã ấn xuống và di chuyển > 15px thì là Kéo (Drag) - tăng ngưỡng để dễ click
             const moveDistance = Math.sqrt(
@@ -489,8 +484,8 @@ function App() {
 
       // 4. Xoay cây (Dừng khi nổ)
       if (disperseAmount < 0.1) {
-         treeParticles.rotation.y = mouseX * 0.5 + elapsed * 0.1;
-         treeParticles.rotation.x = mouseY * 0.1;
+         treeParticles.rotation.y = elapsed * 0.1; // Chỉ tự quay, không theo chuột
+         treeParticles.rotation.x = 0;
       } else {
          treeParticles.rotation.y *= 0.95;
          treeParticles.rotation.x *= 0.95;
@@ -590,7 +585,7 @@ function App() {
               top: `${mem.y}%`,
               left: `${mem.x}%`,
               transform: `translate(-50%, -50%) rotate(${mem.r}deg)`,
-              animationDelay: `${mem.delay}s`
+              animationDelay: `${mem.delay + 1.5}s`
             }}
             onClick={(e) => {
               e.stopPropagation();
