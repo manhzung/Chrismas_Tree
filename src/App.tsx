@@ -333,10 +333,13 @@ function App() {
     
     let mouseX = 0;
     let mouseY = 0;
-    let isDragging = false;
     let isMouseDown = false;
     let startDragX = 0;
     let startDragY = 0;
+    
+    // Timer cho Long Press
+    const longPressTimerRef = useRef<number | null>(null);
+    const LONG_PRESS_DURATION = 800; // 800ms để kích hoạt
 
     // Hàm chung xử lý di chuyển (cho cả Mouse và Touch)
     const handleMoveInput = (clientX: number, clientY: number) => {
@@ -344,20 +347,23 @@ function App() {
         mouseY = -(clientY / window.innerHeight) * 2 + 1;
 
         if (isMouseDown) {
-            // Nếu đã ấn xuống và di chuyển > 15px thì là Kéo (Drag) - tăng ngưỡng để dễ click
             const moveDistance = Math.sqrt(
                 Math.pow(clientX - startDragX, 2) + 
                 Math.pow(clientY - startDragY, 2)
             );
             if (moveDistance > 15) {
-                isDragging = true;
+                // Nếu di chuyển quá nhiều -> Hủy long press
+                if (longPressTimerRef.current) {
+                    clearTimeout(longPressTimerRef.current);
+                    longPressTimerRef.current = null;
+                }
             }
         }
     };
 
     const onMouseMove = (e: MouseEvent) => handleMoveInput(e.clientX, e.clientY);
     const onTouchMove = (e: TouchEvent) => {
-        e.preventDefault(); // Prevent scrolling
+        // e.preventDefault(); // Cho phép scroll nếu muốn, nhưng ở đây canvas full màn thì chặn cũng được
         if (e.touches.length > 0) {
             handleMoveInput(e.touches[0].clientX, e.touches[0].clientY);
         }
@@ -366,9 +372,22 @@ function App() {
     // Hàm chung xử lý ấn xuống
     const onDown = (clientX: number, clientY: number) => {
         isMouseDown = true;
-        isDragging = false;
         startDragX = clientX;
         startDragY = clientY;
+
+        // Bắt đầu đếm giờ Long Press
+        if (longPressTimerRef.current) clearTimeout(longPressTimerRef.current);
+        
+        longPressTimerRef.current = setTimeout(() => {
+            // Nếu timer chạy hết mà chưa bị hủy -> Kích hoạt
+            isDispersed = !isDispersed; // Toggle
+            console.log('Long Press Triggered! Dispersed:', isDispersed);
+            
+            // Rung nhẹ phản hồi (nếu trình duyệt hỗ trợ)
+            if (navigator.vibrate) navigator.vibrate(50);
+            
+            longPressTimerRef.current = null;
+        }, LONG_PRESS_DURATION);
     };
 
     const onMouseDown = (e: MouseEvent) => onDown(e.clientX, e.clientY);
@@ -378,47 +397,36 @@ function App() {
         }
     };
 
-    // Hàm chung xử lý nhả ra - Đơn giản hóa: chỉ cần không drag là click
+    // Hàm chung xử lý nhả ra
     const onUp = () => {
-        if (isMouseDown && !isDragging) {
-            // Nếu không phải drag -> là click -> toggle phân tán
-            isDispersed = !isDispersed;
-            console.log('Dispersion toggled (onUp):', isDispersed, 'disperseAmount will animate to:', isDispersed ? 1 : 0);
-        }
         isMouseDown = false;
-        isDragging = false;
+        
+        // Nếu nhả ra sớm -> Hủy long press
+        if (longPressTimerRef.current) {
+            clearTimeout(longPressTimerRef.current);
+            longPressTimerRef.current = null;
+        }
     };
 
-    // Hàm xử lý click trực tiếp - đơn giản và đáng tin cậy hơn
-    const onClick = (e: MouseEvent | TouchEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        isDispersed = !isDispersed;
-        console.log('Dispersion toggled (onClick):', isDispersed, 'disperseAmount will animate to:', isDispersed ? 1 : 0);
-    };
-
-    // Thêm event listener trực tiếp vào canvas để đảm bảo click được phát hiện
+    // Thêm event listener trực tiếp vào canvas
     const canvas = renderer.domElement;
-    canvas.style.cursor = 'pointer'; // Hiển thị con trỏ pointer để người dùng biết có thể click
+    canvas.style.cursor = 'pointer'; 
     
-    // Thêm cả click event (đơn giản nhất)
-    canvas.addEventListener('click', onClick);
+    // Chỉ dùng MouseDown/TouchStart cho Long Press, bỏ Click
     canvas.addEventListener('mousedown', onMouseDown);
     canvas.addEventListener('mouseup', onUp);
+    canvas.addEventListener('mouseleave', onUp); // Ra khỏi canvas cũng hủy
     canvas.addEventListener('mousemove', onMouseMove);
+    
     canvas.addEventListener('touchstart', onTouchStart, { passive: false });
     const onTouchEnd = (e: TouchEvent) => {
         e.preventDefault();
-        // Chỉ dùng onClick cho touch, không dùng onUp để tránh double toggle
-        onClick(e);
+        onUp();
     };
     canvas.addEventListener('touchend', onTouchEnd);
     canvas.addEventListener('touchmove', onTouchMove, { passive: false });
     
-    // Thêm vào container để đảm bảo
-    if (containerRef.current) {
-        containerRef.current.addEventListener('click', onClick);
-    }
+    // Bỏ qua các listener click trên container để tránh xung đột
     
     // Giữ lại các listener trên window/document để xử lý mouse move khi ra ngoài canvas
     window.addEventListener('mousemove', onMouseMove);
@@ -523,23 +531,21 @@ function App() {
 
     return () => {
         // Remove canvas event listeners
-        canvas.removeEventListener('click', onClick);
         canvas.removeEventListener('mousedown', onMouseDown);
         canvas.removeEventListener('mouseup', onUp);
+        canvas.removeEventListener('mouseleave', onUp);
         canvas.removeEventListener('mousemove', onMouseMove);
         canvas.removeEventListener('touchstart', onTouchStart);
         canvas.removeEventListener('touchend', onTouchEnd);
         canvas.removeEventListener('touchmove', onTouchMove);
         
-        // Remove container event listeners
-        if (containerRef.current) {
-            containerRef.current.removeEventListener('click', onClick);
-        }
-        
         // Remove window/document event listeners
         window.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onUp);
         window.removeEventListener('resize', handleResize);
+        
+        // Clear timer
+        if (longPressTimerRef.current) clearTimeout(longPressTimerRef.current);
         
         // Cleanup Three.js resources
         containerRef.current?.removeChild(renderer.domElement);
