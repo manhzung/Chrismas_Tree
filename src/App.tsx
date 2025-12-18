@@ -373,13 +373,8 @@ function App() {
         }
     };
 
-    // Hàm chung xử lý nhả ra - Đơn giản hóa: chỉ cần không drag là click
+    // Hàm chung xử lý nhả ra - Đơn giản hóa: reset state drag
     const onUp = () => {
-        if (isMouseDown && !isDragging) {
-            // Nếu không phải drag -> là click -> toggle phân tán
-            isDispersed = !isDispersed;
-            console.log('Dispersion toggled (onUp):', isDispersed, 'disperseAmount will animate to:', isDispersed ? 1 : 0);
-        }
         isMouseDown = false;
         isDragging = false;
     };
@@ -388,6 +383,10 @@ function App() {
     const onClick = (e: MouseEvent | TouchEvent) => {
         e.preventDefault();
         e.stopPropagation();
+        
+        // Nếu đang drag thì không toggle
+        if (isDragging) return;
+
         isDispersed = !isDispersed;
         console.log('Dispersion toggled (onClick):', isDispersed, 'disperseAmount will animate to:', isDispersed ? 1 : 0);
     };
@@ -402,10 +401,11 @@ function App() {
     canvas.addEventListener('mouseup', onUp);
     canvas.addEventListener('mousemove', onMouseMove);
     canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+    
     const onTouchEnd = (e: TouchEvent) => {
-        e.preventDefault();
-        // Chỉ dùng onClick cho touch, không dùng onUp để tránh double toggle
-        onClick(e);
+        e.preventDefault(); // Ngăn chặn sự kiện click giả lập của browser
+        onUp();
+        onClick(e); // Gọi click luôn vì preventDefault đã chặn click tự nhiên
     };
     canvas.addEventListener('touchend', onTouchEnd);
     canvas.addEventListener('touchmove', onTouchMove, { passive: false });
