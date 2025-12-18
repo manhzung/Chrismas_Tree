@@ -1,0 +1,24 @@
+DISPERSION DEBUG:
+===============
+
+Bạn thấy alert "Dispersion: ON" nhưng particles không phân tán.
+
+Vui lòng:
+1. Mở Console (F12)
+2. Click giữ 1s để trigger 
+3. Trong Console, bạn có thấy:
+   - "Progress: 0.08 Target: 1"
+   - "Progress: 0.16 Target: 1"
+   - ... liên tục không?
+
+NẾU THẤY LOG:
+- Animation đang chạy
+- Vấn đề có thể là:
+  * Vùng phân tán quá nhỏ (đã fix 60x40x50)
+  * Hoặc lerp calculation sai
+  
+NẾU KHÔNG THẤY LOG:
+- Animation loop không chạy
+- Cần kiểm tra code animation
+
+Hãy cho tôi biết bạn thấy log Progress hay không!

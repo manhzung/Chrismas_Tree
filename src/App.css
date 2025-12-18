@@ -1,0 +1,1160 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.app {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: #000;
+}
+
+.canvas-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.title {
+  font-family: "Georgia", serif;
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(135deg, #ffd700, #ff6b6b, #ffd700);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.5),
+    0 0 60px rgba(255, 107, 107, 0.3);
+  animation: shimmer 3s ease-in-out infinite, floatTitle 4s ease-in-out infinite;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-family: "Arial", sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 2px;
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes floatTitle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* Responsive - Tablet */
+@media (max-width: 768px) {
+  .overlay {
+    padding-bottom: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 480px) {
+  .overlay {
+    padding-bottom: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .title {
+    font-size: 1.75rem;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5),
+                 0 0 40px rgba(255, 107, 107, 0.3);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-align: center;
+    line-height: 1.4;
+  }
+}
+
+/* Responsive - Small Mobile */
+@media (max-width: 360px) {
+  .overlay {
+    padding-bottom: 20px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-size: 0.7rem;
+  }
+}
+
+/* ============ PHONG THƯ NHỎ LƠ LỬNG ============ */
+.small-letter {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  cursor: pointer;
+  animation: float 3s ease-in-out infinite;
+  pointer-events: auto;
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(-50%, -50%) translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translate(-50%, -50%) translateY(-15px) rotate(2deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) translateY(-25px) rotate(0deg);
+  }
+  75% {
+    transform: translate(-50%, -50%) translateY(-15px) rotate(-2deg);
+  }
+}
+
+.letter-envelope {
+  width: 140px;
+  height: 95px;
+  position: relative;
+  background: 
+    linear-gradient(135deg, #d4a574 0%, #c8965f 50%, #b8854a 100%),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgba(255, 255, 255, 0.1) 8px,
+      rgba(255, 255, 255, 0.1) 16px
+    );
+  border-radius: 8px;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(255, 215, 0, 0.4),
+    0 0 60px rgba(255, 215, 0, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border: 3px solid rgba(255, 215, 0, 0.6);
+  overflow: hidden;
+}
+
+.letter-envelope::before {
+  content: '❄';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  opacity: 0.7;
+  animation: sparkle 2s ease-in-out infinite;
+  z-index: 2;
+}
+
+.letter-envelope::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation: shimmer 3s linear infinite;
+  opacity: 0.3;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.7;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.2);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(20px, 20px);
+  }
+}
+
+.small-letter:hover .letter-envelope {
+  transform: scale(1.15);
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(255, 215, 0, 0.6),
+    0 0 80px rgba(255, 215, 0, 0.4),
+    inset 0 0 30px rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 215, 0, 0.9);
+}
+
+.letter-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: 
+    linear-gradient(135deg, #e8c19a 0%, #d4a574 50%, #c8965f 100%),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 10px,
+      rgba(220, 53, 69, 0.15) 10px,
+      rgba(220, 53, 69, 0.15) 12px
+    );
+  border-radius: 8px 8px 0 0;
+  transform-origin: top;
+  transform: perspective(200px) rotateX(-8deg);
+  box-shadow: 
+    0 -3px 15px rgba(0, 0, 0, 0.3),
+    inset 0 2px 10px rgba(255, 255, 255, 0.2);
+  border-bottom: 2px solid rgba(139, 69, 19, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.letter-flap::before {
+  content: '⭐';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  opacity: 0.4;
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+.letter-flap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  animation: shine 3s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0%, 100% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+}
+
+.letter-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: 
+    linear-gradient(135deg, #c8965f 0%, #b8854a 50%, #a6753a 100%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 8px,
+      rgba(139, 69, 19, 0.1) 8px,
+      rgba(139, 69, 19, 0.1) 10px
+    );
+  border-radius: 0 0 8px 8px;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.letter-body::before {
+  content: '🎄';
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  opacity: 0.5;
+  animation: twinkle 2.5s ease-in-out infinite 0.5s;
+}
+
+/* ============ PHONG THƯ MỞ ============ */
+.opened-letter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.opened-letter.opening {
+  animation: letterOpen 0.8s ease-out forwards;
+}
+
+.opened-letter.opened {
+  pointer-events: auto;
+}
+
+@keyframes letterOpen {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.letter-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+}
+
+.letter-content {
+  position: relative;
+  z-index: 1;
+  width: 90%;
+  max-width: 500px;
+  pointer-events: auto;
+}
+
+.letter-paper {
+  background: 
+    linear-gradient(135deg, #fffef7 0%, #f9f7f0 100%),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(220, 53, 69, 0.03) 10px,
+      rgba(220, 53, 69, 0.03) 20px
+    );
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(255, 215, 0, 0.3),
+    inset 0 0 30px rgba(255, 215, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 4px double #d4a574;
+  position: relative;
+  overflow: hidden;
+}
+
+.letter-paper::before {
+  content: '❄';
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  opacity: 0.3;
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+.letter-paper::after {
+  content: '🎄';
+  position: absolute;
+  bottom: 10px;
+  left: 15px;
+  font-size: 1.5rem;
+  opacity: 0.3;
+  animation: twinkle 2s ease-in-out infinite 1s;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+.letter-paper:hover {
+  transform: scale(1.02);
+  box-shadow: 
+    0 25px 70px rgba(0, 0, 0, 0.6),
+    0 0 60px rgba(255, 215, 0, 0.4),
+    inset 0 0 40px rgba(255, 215, 0, 0.15);
+  border-color: #c8965f;
+}
+
+.letter-text {
+  text-align: center;
+  color: #4a4a4a;
+}
+
+.letter-text h2 {
+  font-family: "Georgia", serif;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #8b4513;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.letter-text p {
+  font-family: "Arial", sans-serif;
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* ============ TRANG LỜI CHÚC ============ */
+.message-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.message-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.message-content {
+  position: relative;
+  z-index: 1;
+  background: 
+    linear-gradient(135deg, #fffef7 0%, #f9f7f0 100%),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 15px,
+      rgba(220, 53, 69, 0.03) 15px,
+      rgba(220, 53, 69, 0.03) 30px
+    );
+  border-radius: 16px;
+  padding: 50px 40px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 
+    0 25px 70px rgba(0, 0, 0, 0.6),
+    0 0 60px rgba(255, 215, 0, 0.4),
+    inset 0 0 40px rgba(255, 215, 0, 0.1);
+  border: 4px double #d4a574;
+  text-align: center;
+  position: relative;
+}
+
+.message-content::before {
+  content: '🎄';
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 2rem;
+  opacity: 0.4;
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+.message-content::after {
+  content: '❄';
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.5rem;
+  opacity: 0.4;
+  animation: twinkle 2s ease-in-out infinite 1s;
+}
+
+.message-content h1 {
+  font-family: "Georgia", serif;
+  font-size: 2.5rem;
+  color: #8b4513;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.message-text {
+  font-family: "Arial", sans-serif;
+  font-size: 1.2rem;
+  color: #4a4a4a;
+  line-height: 2;
+  margin-bottom: 30px;
+}
+
+.message-text p {
+  margin-bottom: 15px;
+}
+
+.next-button {
+  background: linear-gradient(135deg, #d4a574 0%, #c8965f 100%);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  font-family: "Arial", sans-serif;
+  font-weight: bold;
+}
+
+.next-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #e8c19a 0%, #d4a574 100%);
+}
+
+/* ============ TRANG ẢNH ============ */
+.images-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.images-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.images-content {
+  position: relative;
+  z-index: 1;
+  background: 
+    linear-gradient(135deg, #fffef7 0%, #f9f7f0 100%),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 15px,
+      rgba(220, 53, 69, 0.03) 15px,
+      rgba(220, 53, 69, 0.03) 30px
+    );
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 
+    0 25px 70px rgba(0, 0, 0, 0.6),
+    0 0 60px rgba(255, 215, 0, 0.4),
+    inset 0 0 40px rgba(255, 215, 0, 0.1);
+  border: 4px double #d4a574;
+}
+
+.images-content::before {
+  content: '📸';
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  font-size: 1.8rem;
+  opacity: 0.4;
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+.images-content::after {
+  content: '🎄';
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.8rem;
+  opacity: 0.4;
+  animation: twinkle 2s ease-in-out infinite 1s;
+}
+
+.images-content h2 {
+  font-family: "Georgia", serif;
+  font-size: 2rem;
+  color: #8b4513;
+  margin-bottom: 30px;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.image-placeholder {
+  aspect-ratio: 1;
+  background: 
+    linear-gradient(135deg, #e8c19a 0%, #d4a574 100%),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(139, 69, 19, 0.1) 10px,
+      rgba(139, 69, 19, 0.1) 20px
+    );
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b4513;
+  font-family: "Arial", sans-serif;
+  font-size: 1rem;
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(255, 215, 0, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  border: 3px double #c8965f;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.image-placeholder::before {
+  content: '📷';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+  opacity: 0.3;
+}
+
+.image-placeholder:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 12px 35px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(255, 215, 0, 0.3),
+    inset 0 0 30px rgba(255, 255, 255, 0.15);
+}
+
+.back-button {
+  background: linear-gradient(135deg, #d4a574 0%, #c8965f 100%);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  font-family: "Arial", sans-serif;
+  font-weight: bold;
+  display: block;
+  margin: 0 auto;
+}
+
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #e8c19a 0%, #d4a574 100%);
+}
+
+.images-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.images-buttons .back-button,
+.images-buttons .next-button {
+  flex: 1;
+  min-width: 150px;
+  margin: 0;
+}
+
+/* ============ TRANG LOVE YOU ============ */
+.love-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.love-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(255, 20, 147, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(255, 192, 203, 0.1) 0%, transparent 50%),
+    rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.love-content {
+  position: relative;
+  z-index: 1;
+  background: 
+    linear-gradient(135deg, #fffef7 0%, #f9f7f0 100%),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 15px,
+      rgba(220, 53, 69, 0.03) 15px,
+      rgba(220, 53, 69, 0.03) 30px
+    );
+  border-radius: 20px;
+  padding: 60px 50px;
+  max-width: 600px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.7),
+    0 0 80px rgba(255, 20, 147, 0.3),
+    inset 0 0 50px rgba(255, 215, 0, 0.15);
+  border: 4px double #d4a574;
+  position: relative;
+  overflow: hidden;
+}
+
+.love-content::before {
+  content: '💕';
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  font-size: 2.5rem;
+  opacity: 0.4;
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+.love-content::after {
+  content: '💖';
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 2.5rem;
+  opacity: 0.4;
+  animation: twinkle 2s ease-in-out infinite 1s;
+}
+
+.love-heart {
+  font-size: 5rem;
+  margin-bottom: 20px;
+  animation: heartbeat 1.5s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.love-title {
+  font-family: "Georgia", serif;
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, #ff1493 0%, #ff69b4 50%, #ff1493 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 30px;
+  text-shadow: 0 0 30px rgba(255, 20, 147, 0.5);
+  animation: shimmer 3s ease-in-out infinite;
+  font-weight: bold;
+}
+
+.love-message {
+  font-family: "Arial", sans-serif;
+  font-size: 1.3rem;
+  color: #4a4a4a;
+  line-height: 2;
+  margin-bottom: 40px;
+}
+
+.love-message p {
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.love-snowflakes {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  opacity: 0.6;
+}
+
+.love-snowflakes span {
+  animation: float 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+.love-snowflakes span:nth-child(1) { animation-delay: 0s; }
+.love-snowflakes span:nth-child(2) { animation-delay: 0.5s; }
+.love-snowflakes span:nth-child(3) { animation-delay: 1s; }
+.love-snowflakes span:nth-child(4) { animation-delay: 1.5s; }
+.love-snowflakes span:nth-child(5) { animation-delay: 2s; }
+
+.love-content .back-button {
+  background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+  box-shadow: 0 4px 15px rgba(255, 20, 147, 0.4);
+}
+
+.love-content .back-button:hover {
+  background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+  box-shadow: 0 6px 25px rgba(255, 20, 147, 0.6);
+}
+
+/* Responsive cho phong thư */
+@media (max-width: 768px) {
+  .letter-envelope {
+    width: 120px;
+    height: 85px;
+  }
+
+  .letter-envelope::before {
+    font-size: 1rem;
+  }
+
+  .letter-flap::before {
+    font-size: 1.2rem;
+  }
+
+  .letter-body::before {
+    font-size: 0.9rem;
+  }
+
+  .letter-paper {
+    padding: 30px 20px;
+  }
+
+  .letter-text h2 {
+    font-size: 1.5rem;
+  }
+
+  .letter-text p {
+    font-size: 1rem;
+  }
+
+  .message-content {
+    padding: 40px 30px;
+  }
+
+  .message-content h1 {
+    font-size: 2rem;
+  }
+
+  .message-text {
+    font-size: 1.1rem;
+  }
+
+  .images-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+  }
+
+  .love-content {
+    padding: 40px 30px;
+  }
+
+  .love-title {
+    font-size: 2.5rem;
+  }
+
+  .love-message {
+    font-size: 1.1rem;
+  }
+
+  .love-heart {
+    font-size: 4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .letter-envelope {
+    width: 100px;
+    height: 70px;
+  }
+
+  .letter-envelope::before {
+    font-size: 0.9rem;
+  }
+
+  .letter-flap::before {
+    font-size: 1rem;
+  }
+
+  .letter-body::before {
+    font-size: 0.8rem;
+  }
+
+  .letter-paper {
+    padding: 25px 15px;
+  }
+
+  .letter-text h2 {
+    font-size: 1.3rem;
+  }
+
+  .message-content {
+    padding: 30px 20px;
+  }
+
+  .message-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .message-text {
+    font-size: 1rem;
+  }
+
+  .images-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .love-content {
+    padding: 30px 20px;
+  }
+
+  .love-title {
+    font-size: 2rem;
+  }
+
+  .love-message {
+    font-size: 1rem;
+  }
+
+  .love-heart {
+    font-size: 3.5rem;
+  }
+
+  .love-snowflakes {
+    font-size: 1.5rem;
+  }
+}
+
+/* ============ ẢNH BAY LƠ LỬNG ============ */
+.floating-image-card {
+  position: fixed;
+  width: 100px;
+  height: 140px;
+  z-index: 90; /* Thấp hơn SmallLetter (100) để không che */
+  cursor: pointer;
+  pointer-events: auto;
+  perspective: 1000px;
+  animation: floatImage 4s ease-in-out infinite;
+  transition: transform 0.3s ease, z-index 0s;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  border: 3px solid white;
+  background: white;
+}
+
+.floating-image-card:hover {
+  z-index: 300; /* Lên trên cùng khi hover */
+  transform: translate(-50%, -50%) scale(1.2) rotate(0deg) !important;
+  box-shadow: 0 15px 30px rgba(255,215,0,0.6);
+  border-color: gold;
+}
+
+.image-card-inner {
+  width: 100%;
+  height: 100%;
+  background: white;
+  overflow: hidden;
+}
+
+.floating-image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@keyframes floatImage {
+  0%, 100% {
+    margin-top: 0;
+  }
+  50% {
+    margin-top: -15px;
+  }
+}
+
+/* ============ MODAL XEM ẢNH ============ */
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+  cursor: pointer;
+}
+
+.image-modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  transform: scale(0.8);
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  box-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
+  background: white;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.image-modal-content img {
+  max-width: 100%;
+  max-height: 85vh;
+  display: block;
+  border-radius: 4px;
+}
+
+.close-button {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 40px;
+  height: 40px;
+  background: #ff4757;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+
+.close-button:hover {
+  transform: scale(1.1);
+  background: #ff6b81;
+}
+
+@keyframes popIn {
+  to {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .floating-image-card {
+    width: 70px; /* ~100px / 1.5 */
+    height: 95px; /* ~140px / 1.5 */
+  }
+}
+
