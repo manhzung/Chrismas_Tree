@@ -37,7 +37,7 @@ body,
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  padding-bottom: 120px; /* Tăng lên để đẩy chữ lên cao hơn */
+  padding-bottom: 40px; /* Hạ thấp xuống ở desktop */
   padding-left: 20px;
   padding-right: 20px;
   pointer-events: none;
@@ -106,7 +106,7 @@ body,
 /* Responsive - Mobile */
 @media (max-width: 480px) {
   .overlay {
-    padding-bottom: 70px;
+    padding-bottom: 200px;
     padding-left: 10px;
     padding-right: 10px;
   }
@@ -130,7 +130,7 @@ body,
 /* Responsive - Small Mobile */
 @media (max-width: 360px) {
   .overlay {
-    padding-bottom: 20px;
+    padding-bottom: 180px;
   }
 
   .title {
