@@ -106,7 +106,7 @@ body,
 /* Responsive - Mobile */
 @media (max-width: 480px) {
   .overlay {
-    padding-bottom: 200px;
+    padding-bottom: 130px;
     padding-left: 10px;
     padding-right: 10px;
   }
