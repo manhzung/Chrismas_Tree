@@ -1039,17 +1039,6 @@ body,
   }
 }
 
-@keyframes imageAppear {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-
 /* ============ ẢNH BAY LƠ LỬNG ============ */
 .floating-image-card {
   position: fixed;
@@ -1059,8 +1048,7 @@ body,
   cursor: pointer;
   pointer-events: auto;
   perspective: 1000px;
-  opacity: 0; /* Mặc định ẩn */
-  animation: imageAppear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, floatImage 4s ease-in-out infinite;
+  animation: floatImage 4s ease-in-out infinite;
   transition: transform 0.3s ease, z-index 0s;
   box-shadow: 0 10px 20px rgba(0,0,0,0.5);
   border: 3px solid white;

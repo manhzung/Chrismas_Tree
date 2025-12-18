@@ -571,21 +571,23 @@ function App() {
   // Component ảnh bay xung quanh
   const FloatingImages = () => {
     // Chỉ hiển thị khi đã phân tán (letterStep không phải hidden) và chưa vào trang cuối
-    // Update: User said "hiển thị thêm các ảnh xung quanh sau khi phân tán"
-    // We can show them when letterStep is 'small' or greater.
     if (letterStep === 'hidden') return null;
 
     return (
       <>
-        {memories.map((mem) => (
+        {memories.map((mem, index) => (
           <div 
             key={mem.id}
             className="floating-image-card"
             style={{
               top: `${mem.y}%`,
               left: `${mem.x}%`,
-              transform: `translate(-50%, -50%) rotate(${mem.r}deg)`,
-              animationDelay: `${mem.delay + 1.5}s`
+              // Kết hợp 2 animation: 
+              // 1. floatImage: đung đưa (vẫn giữ delay ngẫu nhiên cũ để tự nhiên)
+              // 2. fadeIn: hiện dần (delay theo thứ tự để xuất hiện lần lượt sau lá thư)
+              animation: `floatImage 4s ease-in-out infinite ${mem.delay}s, fadeIn 0.8s ease-out forwards ${1.0 + index * 0.3}s`,
+              opacity: 0, // Bắt đầu ẩn
+              transform: `translate(-50%, -50%) rotate(${mem.r}deg)` // Giữ transform góc xoay
             }}
             onClick={(e) => {
               e.stopPropagation();
