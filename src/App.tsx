@@ -674,8 +674,10 @@ function App() {
         <div className="message-content">
           <h1>🎄 Chúc Mừng Giáng Sinh 🎄</h1>
           <div className="message-text">
-            <p>Chúc bạn và gia đình một mùa Giáng Sinh thật ấm áp và hạnh phúc!</p>
-            <p>Mong rằng năm mới sẽ mang đến nhiều niềm vui và thành công!</p>
+            <p>Merry Christmas, em Bống</p>
+            <p>Giáng sinh này anh bi gửi nỗi nhớ và hơi ấm qua màn hình nhé.</p>
+            <p>Cảm ơn em vì 5 năm đã yêu anh nhóoo!!!!</p>
+            
             <p>✨ Merry Christmas & Happy New Year! ✨</p>
           </div>
         </div>

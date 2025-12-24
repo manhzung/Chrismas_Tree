@@ -125,6 +125,10 @@ body,
     text-align: center;
     line-height: 1.4;
   }
+
+  .letter-text h2 {
+    font-size: 1.2rem;
+  }
 }
 
 /* Responsive - Small Mobile */
@@ -389,7 +393,7 @@ body,
 .letter-content {
   position: relative;
   z-index: 1;
-  width: 90%;
+  width: 100%;
   max-width: 500px;
   pointer-events: auto;
 }
@@ -468,6 +472,7 @@ body,
   margin-bottom: 20px;
   color: #8b4513;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
 }
 
 .letter-text p {
@@ -525,7 +530,7 @@ body,
     );
   border-radius: 16px;
   padding: 50px 40px;
-  max-width: 600px;
+  max-width: 700px;
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
